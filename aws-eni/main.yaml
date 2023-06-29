@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+spec:
+  destination:
+    name: ''
+    namespace: kube-system
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: ''
+    repoURL: 'https://helm.cilium.io/'
+    targetRevision: 1.13.4
+    chart: cilium
+    helm:
+      values: |-
+        eni:
+          enabled: "true"
+        ipam:
+          mode: "eni"
+        egressMasqueradeInterfaces: "eth0"
+        tunnel: "disabled"
+      valueFiles: []
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
